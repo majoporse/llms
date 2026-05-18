@@ -15,7 +15,7 @@ from nanochat.common import autodetect_device_type, compute_cleanup, compute_ini
 class GrammarPreferenceTuneSettings:
     source: str = "base"
     hf_path: str | None = None
-    model_tag: str | None = "d8"
+    model_tag: str | None = "d6"
     step: int | None = None
     pairs_path: str = "./data/devel.tsv"
     test_fraction: float = 0.05

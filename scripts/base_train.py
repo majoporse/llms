@@ -26,7 +26,7 @@ from scripts.base_eval import evaluate_core
 class BaseTrainSettings:
     run: str = "dummy"
     device_type: str = "cuda"
-    depth: int = 8
+    depth: int = 
     aspect_ratio: int = 64
     head_dim: int = 128
     max_seq_len: int = 32
