@@ -24,11 +24,31 @@ BASE_URL = "https://huggingface.co/datasets/karpathy/climbmix-400b-shuffle/resol
 MAX_SHARD = 6542 # the last datashard is shard_06542.parquet
 index_to_filename = lambda index: f"shard_{index:05d}.parquet" # format of the filenames
 base_dir = get_base_dir()
-DATA_DIR = os.path.join(base_dir, "base_data_climbmix")
+DATA_DIR = base_dir
 
 # -----------------------------------------------------------------------------
 # These functions are useful utilities to other modules, can/should be imported
+def read_leipzig_txt(filepath):
+    texts = []
+    with open(filepath, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
 
+            # split only on first tab
+            parts = line.split("\t", 1)
+
+            if len(parts) == 2:
+                text = parts[1]
+            else:
+                # fallback if formatting is broken
+                text = parts[0]
+
+            texts.append(text)
+
+    return texts
+    
 def list_parquet_files(data_dir=None, warn_on_legacy=False):
     """ Looks into a data dir and returns full paths to all parquet files. """
     data_dir = DATA_DIR if data_dir is None else data_dir
@@ -55,7 +75,7 @@ def list_parquet_files(data_dir=None, warn_on_legacy=False):
             print("=" * 80)
             print()
         # attempt a fallback to the legacy data directory
-        data_dir = os.path.join(base_dir, "base_data")
+        data_dir = os.path.join(base_dir, "data.txt")
 
     parquet_files = sorted([
         f for f in os.listdir(data_dir)

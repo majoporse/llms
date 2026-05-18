@@ -6,6 +6,22 @@ import torch
 import torch.distributed as dist
 
 @torch.no_grad()
+def evaluate_mean_nll(model, input_ids):
+    """
+    Return the mean next-token negative log-likelihood for one sentence.
+    The input must be a 1D tensor of token ids including BOS.
+    """
+    if input_ids.ndim != 1:
+        raise ValueError("input_ids must be 1D")
+    if input_ids.numel() < 2:
+        return float('inf')
+
+    x = input_ids[:-1].unsqueeze(0)
+    y = input_ids[1:].unsqueeze(0)
+    loss = model(x, y)
+    return float(loss.item())
+
+@torch.no_grad()
 def evaluate_bpb(model, batches, steps, token_bytes):
     """
     Instead of the naive 'mean loss', this function returns the bits per byte (bpb),

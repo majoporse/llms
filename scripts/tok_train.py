@@ -27,20 +27,21 @@ print(f"vocab_size: {args.vocab_size:,}")
 
 def text_iterator():
     """
-    1) Flatten the batches into a single iterator
+    1) Load texts from data/data.txt
     2) Crop every document to args.doc_cap characters
     3) Break when we've seen args.max_chars characters
     """
+    from nanochat.dataset import read_leipzig_txt
+
     nchars = 0
-    for batch in parquets_iter_batched(split="train"):
-        for doc in batch:
-            doc_text = doc
-            if len(doc_text) > args.doc_cap:
-                doc_text = doc_text[:args.doc_cap]
-            nchars += len(doc_text)
-            yield doc_text
-            if nchars > args.max_chars:
-                return
+    data_path = os.path.join(os.path.dirname(__file__), "..", "data", "data.txt")
+    for doc_text in read_leipzig_txt(data_path):
+        if len(doc_text) > args.doc_cap:
+            doc_text = doc_text[:args.doc_cap]
+        nchars += len(doc_text)
+        yield doc_text
+        if nchars > args.max_chars:
+            return
 text_iter = text_iterator()
 
 # -----------------------------------------------------------------------------

@@ -3,6 +3,7 @@ Common utilities for nanochat.
 """
 
 import os
+from pathlib import Path
 import re
 import logging
 import urllib.request
@@ -69,14 +70,15 @@ logger = logging.getLogger(__name__)
 
 def get_base_dir():
     # co-locate nanochat intermediates with other cached data in ~/.cache (by default)
-    if os.environ.get("NANOCHAT_BASE_DIR"):
-        nanochat_dir = os.environ.get("NANOCHAT_BASE_DIR")
-    else:
-        home_dir = os.path.expanduser("~")
-        cache_dir = os.path.join(home_dir, ".cache")
-        nanochat_dir = os.path.join(cache_dir, "nanochat")
-    os.makedirs(nanochat_dir, exist_ok=True)
-    return nanochat_dir
+    # if os.environ.get("NANOCHAT_BASE_DIR"):
+    #     nanochat_dir = os.environ.get("NANOCHAT_BASE_DIR")
+    # else:
+    #     home_dir = os.path.expanduser("~")
+    #     cache_dir = os.path.join(home_dir, ".cache")
+    #     nanochat_dir = os.path.join(cache_dir, "nanochat")
+    # os.makedirs(nanochat_dir, exist_ok=True)
+    # return nanochat_dir
+    return Path(os.path.dirname(os.path.abspath(__file__))) / ".." / "data"
 
 def download_file_with_lock(url, filename, postprocess_fn=None):
     """

@@ -69,3 +69,7 @@ conflicts = [
         { extra = "gpu" },
     ],
 ]
+
+[tool.basedpyright]
+typeCheckingMode = "basic"
+reportPrivateImportUsage = false
