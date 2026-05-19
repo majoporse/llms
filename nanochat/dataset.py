@@ -75,7 +75,7 @@ def list_parquet_files(data_dir=None, warn_on_legacy=False):
             print("=" * 80)
             print()
         # attempt a fallback to the legacy data directory
-        data_dir = os.path.join(base_dir, "data.txt")
+        data_dir = os.path.join(base_dir, "eng_news_2025_1M-sentences.txt")
 
     parquet_files = sorted([
         f for f in os.listdir(data_dir)

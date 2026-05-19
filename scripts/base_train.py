@@ -26,15 +26,15 @@ from scripts.base_eval import evaluate_core
 class BaseTrainSettings:
     run: str = "dummy"
     device_type: str = "cuda"
-    depth: int = 
+    depth: int = 4
     aspect_ratio: int = 64
     head_dim: int = 128
     max_seq_len: int = 32
     window_pattern: str = "S"
     
-    num_iterations: int = 300
+    num_iterations: int = 100
     target_param_data_ratio: float = 12.0
-    device_batch_size: int = 256
+    device_batch_size: int = 512
     total_batch_size: int = -1
     embedding_lr: float = 0.3
     unembedding_lr: float = 0.008
@@ -42,7 +42,7 @@ class BaseTrainSettings:
     matrix_lr: float = 0.02
     scalar_lr: float = 0.5
     warmup_steps: int = 10
-    warmdown_ratio: float = 0.65
+    warmdown_ratio: float = 0.35
     final_lr_frac: float = 0.05
     
     model_tag: str | None = None

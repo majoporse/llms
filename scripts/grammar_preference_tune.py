@@ -15,14 +15,14 @@ from nanochat.common import autodetect_device_type, compute_cleanup, compute_ini
 class GrammarPreferenceTuneSettings:
     source: str = "base"
     hf_path: str | None = None
-    model_tag: str | None = "d6"
+    model_tag: str | None = "d4"
     step: int | None = None
     pairs_path: str = "./data/devel.tsv"
     test_fraction: float = 0.05
-    batch_size: int = 16
-    lr: float = 5e-5
+    batch_size: int = 64
+    lr: float = 1e-3
     weight_decay: float = 0.0
-    max_steps: int = 1200
+    max_steps: int = 700
     eval_every: int = 100
     save_every: int = 100
     save_dir: str = "./data/base_checkpoints/tuned"
@@ -33,10 +33,10 @@ class GrammarPreferenceTuneSettings:
 @dataclass
 class GrammarEvalSettings:
     source: str = "base"
-    tsv_path: str = "data/devel-short.tsv"
+    tsv_path: str = "data/eval-input.tsv"
     hf_path: str | None = None
     model_tag: str | None = "tuned"
-    step: int | None = None
+    step: int | None = 700
     device_type: str = "cuda"
     batch_size: int = 16
 
@@ -184,54 +184,6 @@ def save_model(model, tokenizer, settings, model_kind, output_dir, step):
         with open(output_dir / f"meta_{step:06d}.json", "w", encoding="utf-8") as f:
             json.dump(meta, f, indent=2)
 
-
-def grammar_eval(settings=GrammarEvalSettings()):
-    device_type = (
-        autodetect_device_type() if settings.device_type == "" else settings.device_type
-    )
-    ddp, ddp_rank, _ddp_local_rank, ddp_world_size, device = compute_init(device_type)
-    model, tokenizer, model_name, model_kind = load_model_and_tokenizer(
-        settings, device
-    )
-
-    if ddp_world_size != 1:
-        raise NotImplementedError(
-            "grammar_preference_tune.py currently runs in single-process mode only"
-        )
-
-    pairs = read_pairs(settings.tsv_path)
-
-    num_correct = 0
-    total = 0
-    correct_ids = []
-    local_pairs = [
-        (idx, pairs[idx]) for idx in range(ddp_rank, len(pairs), ddp_world_size)
-    ]
-    for start in range(0, len(local_pairs), settings.batch_size):
-        batch = local_pairs[start : start + settings.batch_size]
-        batch_pairs = [pair for _, pair in batch]
-        loss, batch_correct, batch_total = score_pair_batch(
-            model, tokenizer, batch_pairs
-        )
-        num_correct += batch_correct
-        total += batch_total
-        for idx, pred_first in batch:
-            correct_ids.append((idx, pred_first))
-        batch_accuracy = batch_correct / batch_total if batch_total else 0.0
-        print(
-            f"Batch {start // settings.batch_size + 1} accuracy: {batch_accuracy:.4f} ({batch_correct}/{batch_total})"
-        )
-
-    accuracy = num_correct / total if total else 0.0
-    print(f"{model_name} accuracy: {accuracy:.4f} ({num_correct}/{total})")
-    compute_cleanup()
-
-    with open("./data/correct_ids.txt", "w") as f:
-        for idx, pred_first in correct_ids:
-            sentence = pairs[idx][0 if pred_first else 1]
-            f.write(f"{sentence}\n")
-
-
 def preference_tune(settings=GrammarPreferenceTuneSettings()):
     device_type = (
         autodetect_device_type() if settings.device_type == "" else settings.device_type
@@ -315,4 +267,3 @@ def preference_tune(settings=GrammarPreferenceTuneSettings()):
 
 if __name__ == "__main__":
     preference_tune()
-    grammar_eval()

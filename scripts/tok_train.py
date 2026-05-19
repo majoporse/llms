@@ -27,14 +27,14 @@ print(f"vocab_size: {args.vocab_size:,}")
 
 def text_iterator():
     """
-    1) Load texts from data/data.txt
+    1) Load texts from data/eng_news_2025_1M-sentences.txt
     2) Crop every document to args.doc_cap characters
     3) Break when we've seen args.max_chars characters
     """
     from nanochat.dataset import read_leipzig_txt
 
     nchars = 0
-    data_path = os.path.join(os.path.dirname(__file__), "..", "data", "data.txt")
+    data_path = os.path.join(os.path.dirname(__file__), "..", "data", "eng_news_2025_1M-sentences.txt")
     for doc_text in read_leipzig_txt(data_path):
         if len(doc_text) > args.doc_cap:
             doc_text = doc_text[:args.doc_cap]

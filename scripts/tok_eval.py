@@ -144,7 +144,7 @@ Photosynthesis is a photochemical energy transduction process in which light-har
 # The tokenizer was trained on data from earlier shards, so it has seen this data
 from nanochat.dataset import read_leipzig_txt
 
-data_path = os.path.join(os.path.dirname(__file__), "..", "data", "data.txt")
+data_path = os.path.join(os.path.dirname(__file__), "..", "data", "eng_news_2025_1M-sentences.txt")
 train_docs = read_leipzig_txt(data_path)[0]
 train_text = "\n".join(train_docs)
 val_docs = read_leipzig_txt(data_path)[1]

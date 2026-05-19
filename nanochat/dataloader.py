@@ -31,7 +31,7 @@ def _document_batches(split, resume_state_dict, tokenizer_batch_size):
     ddp, ddp_rank, ddp_local_rank, ddp_world_size = get_dist_info()
 
     # 🔴 CHANGE: hardcode your txt path here
-    txt_path = "./data/data.txt"
+    txt_path = "./data/eng_news_2025_1M-sentences.txt"
 
     # Load once into memory (fine for 30MB)
     with open(txt_path, "r", encoding="utf-8") as f:
