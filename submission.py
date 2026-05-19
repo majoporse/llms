@@ -128,19 +128,24 @@ def prepare_training_data() -> None:
 
     archive_path = data_dir / "eng_news_2025_1M.tar.gz"
     devel_path = data_dir / "devel.tsv"
+    sentences_filename = "eng_news_2025_1M-sentences.txt"
 
     print("Downloading Leipzig corpus...")
     _download_file(LEIPZIG_URL, archive_path)
 
     print("Extracting corpus...")
     with tarfile.open(archive_path, "r:gz") as tar:
-        name = "eng_news_2025_1M/eng_news_2025_1M-sentences.txt"
+        name = f"eng_news_2025_1M/{sentences_filename}"
         for member in tar.getmembers():
             if member.name == name:
                 tar.extract(member, data_dir)
                 break
         else:
             raise FileNotFoundError(f"Sentence file {name} not found in the archive")
+    # copy the sentences file to the data directory
+    sentences_path = data_dir / "eng_news_2025_1M" / sentences_filename
+    shutil.copy(sentences_path, data_dir / sentences_filename)
+    
 
     print("Downloading devel data...")
     _download_file(DEVEL_URL, devel_path)
