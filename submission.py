@@ -175,7 +175,7 @@ def evaluate_model(filename: str) -> None:
     shutil.copyfile(repo_output, output_path)
 
 
-if __name__ == "__main__":
-    prepare_training_data()
-    train_model()
-    evaluate_model("data/eval-input.tsv")
+# if __name__ == "__main__":
+#     prepare_training_data()
+#     train_model()
+#     evaluate_model("data/eval-input.tsv")
