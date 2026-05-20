@@ -22,23 +22,12 @@ class GrammarPreferenceTuneSettings:
     batch_size: int = 64
     lr: float = 1e-3
     weight_decay: float = 0.0
-    max_steps: int = 700
+    max_steps: int = 500
     eval_every: int = 100
     save_every: int = 100
     save_dir: str = "./data/base_checkpoints/tuned"
     seed: int = 1337
     device_type: str = "cuda"
-
-
-@dataclass
-class GrammarEvalSettings:
-    source: str = "base"
-    tsv_path: str = "data/eval-input.tsv"
-    hf_path: str | None = None
-    model_tag: str | None = "tuned"
-    step: int | None = 700
-    device_type: str = "cuda"
-    batch_size: int = 16
 
 
 args = GrammarPreferenceTuneSettings()

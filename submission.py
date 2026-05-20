@@ -161,7 +161,7 @@ def train_model() -> None:
 
 def evaluate_model(filename: str) -> None:
     repo_root = _ensure_repo_clone()
-    input_path = Path(filename)
+    input_path = Path(filename).resolve()
     cwd = Path.cwd()
     output_path = cwd / "eval.output"
     repo_output = repo_root / "eval.output"
@@ -176,6 +176,6 @@ def evaluate_model(filename: str) -> None:
 
 
 # if __name__ == "__main__":
-#     prepare_training_data()
-#     train_model()
-#     evaluate_model("data/eval-input.tsv")
+    # prepare_training_data()
+    # train_model()
+    # evaluate_model("data/eval-input.tsv")

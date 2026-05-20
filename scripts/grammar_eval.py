@@ -17,7 +17,7 @@ class GrammarEvalSettings:
     tsv_path: str = "data/eval-input.tsv"
     hf_path: str | None = None
     model_tag: str | None = "tuned"
-    step: int | None = 700
+    step: int | None = 500
     device_type: str = "cuda"
     batch_size: int = 16
     output_file: str = "eval.output"
