@@ -22,7 +22,7 @@ class GrammarPreferenceTuneSettings:
     batch_size: int = 64
     lr: float = 1e-3
     weight_decay: float = 0.0
-    max_steps: int = 500
+    max_steps: int = 400
     eval_every: int = 100
     save_every: int = 100
     save_dir: str = "./data/base_checkpoints/tuned"
